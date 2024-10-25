@@ -15,7 +15,7 @@ export const useAuthStore = defineStore('authStore', ()=>{
       })
       
       user.value = response
-      console.log(user.value);
+      console.log('User ->', user.value);
 
     } catch (error) {
       console.log('error ->', error)

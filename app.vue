@@ -7,7 +7,7 @@
 
 <template>
   <div>
-  <RegisterForm/>
+    <RegisterFormC/>
   </div>
 </template>
 
@@ -18,6 +18,10 @@
 @tailwind utilities;
 
 
-
+@layer components{
+  button{
+    @apply bg-green-800;
+  }
+}
 
 </style>

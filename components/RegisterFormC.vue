@@ -1,0 +1,129 @@
+<script setup lang="ts">
+  import type {UserRegister} from '@/types/auth/registerType';
+  import {useAuthStore} from '@/stores/auth/authStore';
+
+  const authStoreInstance = useAuthStore();
+
+  const formRegister = reactive<UserRegister>({
+    name:'',
+    email:'',
+    password:'',
+    password_confirmation:''
+  });
+
+  const submitRegister = async ()=>{
+    await authStoreInstance.register(formRegister);
+
+    formRegister.name = ''
+    formRegister.email = ''
+    formRegister.password = ''
+    formRegister.password_confirmation = ''
+
+    console.log(formRegister);
+  };
+</script>
+
+
+<template>
+  <div>
+  
+    <section class="form-container">
+      <form @submit.prevent="submitRegister">
+
+        <div class="form-inputs">
+          <input 
+          type="text" 
+          name="name" id="name" 
+          placeholder="Register Name"
+          v-model="formRegister.name"/>
+        </div>
+
+        <div class="form-inputs">
+          <input 
+          type="email" 
+          name="email" 
+          id="email" 
+          placeholder="Register Email"
+          v-model="formRegister.email"/>
+        </div>
+
+        <div class="form-inputs">
+          <input 
+          type="password" 
+          name="password" 
+          id="password" 
+          placeholder="Register Password"
+          v-model="formRegister.password"/>
+        </div>
+
+        <div class="form-inputs">
+          <input 
+          type="password" 
+          name="password_confirmation" 
+          id="password_confirmation" 
+          placeholder="Password Confirmation"
+          v-model="formRegister.password_confirmation"/>
+        </div>
+
+        <button type="submit">Register</button>
+      </form>
+    </section>
+
+  </div>
+</template>
+
+
+<style scoped>
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer components{
+  .form-container{
+    @apply
+    h-full flex flex-col items-center justify-center;
+  }
+
+  form{
+    @apply
+    bg-slate-700
+    rounded-md
+    h-[20rem]
+    flex flex-col items-start justify-between
+    px-10 py-3;
+  }
+
+  .form-inputs{
+    @apply flex flex-col;
+  }
+
+  .form-inputs > input{
+    @apply
+    w-64
+     bg-slate-600
+     p-1
+     outline-none
+     rounded-md
+     mt-1;
+  }
+
+  form > button{
+    @apply
+    bg-blue-700
+    px-16
+    py-1
+    rounded-md
+    font-semibold
+    text-white
+    text-lg;
+  }
+
+}
+
+@layer utilities{
+  .form-inputs > input{
+    @apply placeholder:text-gray-400;
+  }
+}
+</style>
