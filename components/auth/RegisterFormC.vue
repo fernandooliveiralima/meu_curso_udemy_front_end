@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import type {UserRegister} from '@/types/auth/registerType';
+  import type {FormRegister} from '@/types/auth/registerType';
   import {useAuthStore} from '@/stores/auth/authStore';
 
   const authStoreInstance = useAuthStore();
 
-  const formRegister = reactive<UserRegister>({
+  const userFormRegister = reactive<FormRegister>({
     name:'',
     email:'',
     password:'',
@@ -12,12 +12,12 @@
   });
 
   const submitRegister = async ()=>{
-    await authStoreInstance.register(formRegister);
+    await authStoreInstance.register(userFormRegister);
 
-    formRegister.name = ''
-    formRegister.email = ''
-    formRegister.password = ''
-    formRegister.password_confirmation = ''
+    userFormRegister.name = ''
+    userFormRegister.email = ''
+    userFormRegister.password = ''
+    userFormRegister.password_confirmation = ''
 
     
   };
@@ -35,7 +35,7 @@
           type="text" 
           name="name" id="name" 
           placeholder="Register Name"
-          v-model="formRegister.name"/>
+          v-model="userFormRegister.name"/>
         </div>
 
         <div class="form-inputs">
@@ -44,7 +44,7 @@
           name="email" 
           id="email" 
           placeholder="Register Email"
-          v-model="formRegister.email"/>
+          v-model="userFormRegister.email"/>
         </div>
 
         <div class="form-inputs">
@@ -53,7 +53,7 @@
           name="password" 
           id="password" 
           placeholder="Register Password"
-          v-model="formRegister.password"/>
+          v-model="userFormRegister.password"/>
         </div>
 
         <div class="form-inputs">
@@ -62,7 +62,7 @@
           name="password_confirmation" 
           id="password_confirmation" 
           placeholder="Password Confirmation"
-          v-model="formRegister.password_confirmation"/>
+          v-model="userFormRegister.password_confirmation"/>
         </div>
 
         <button type="submit">Register</button>

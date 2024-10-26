@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import type {UserLogin} from '@/types/auth/loginType';
+import type {FormLogin} from '@/types/auth/loginType';
 
 import {useAuthStore} from '@/stores/auth/authStore';
 const authStoreInstance = useAuthStore();
 
-const formLogin = reactive<UserLogin>({
+const userFormLogin = reactive<FormLogin>({
   email:'',
   password:''
 });
 
 const submitLogin = async ()=>{
-  await authStoreInstance.login(formLogin);
+  await authStoreInstance.login(userFormLogin);
 
-  formLogin.email = '';
-  formLogin.password = '';
+  userFormLogin.email = '';
+  userFormLogin.password = '';
 }
 </script>
 
@@ -30,7 +30,7 @@ const submitLogin = async ()=>{
           name="email" 
           id="email" 
           placeholder="Email"
-          v-model="formLogin.email"/>
+          v-model="userFormLogin.email"/>
         </div>
 
         <div class="form-inputs">
@@ -39,7 +39,7 @@ const submitLogin = async ()=>{
           name="password" 
           id="password" 
           placeholder="Password"
-          v-model="formLogin.password"/>
+          v-model="userFormLogin.password"/>
         </div>
 
         <button type="submit">Login</button>

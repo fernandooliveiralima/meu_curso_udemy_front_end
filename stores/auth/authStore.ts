@@ -1,7 +1,7 @@
 import {defineStore} from 'pinia';
 import {useCookie, useRouter} from '#app';
 
-
+import type {FormRegister} from '@/types/auth/registerType';
 import type {FormLogin} from '@/types/auth/loginType';
 import type {UserLogin, UserRegister, RegisterResponse, LoginResponse} from '@/types/auth/responseLogin';
 
@@ -21,7 +21,7 @@ export const useAuthStore = defineStore('authStore', ()=>{
 
   const router = useRouter();
 
-  const register = async (userRegister: UserRegister)=>{
+  const register = async (userRegister: FormRegister)=>{
     try {
       const response: RegisterResponse = await $fetch('http://localhost:8000/api/register', {
         method:'POST',

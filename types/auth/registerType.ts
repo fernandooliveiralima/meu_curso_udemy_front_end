@@ -1,4 +1,4 @@
-export type UserRegister = {
+export type FormRegister = {
   name: string;
   email: string;
   password: string;
