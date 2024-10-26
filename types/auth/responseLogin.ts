@@ -1,10 +1,18 @@
-export type User = {
+export type UserLogin = {
   id: number;
   name: string;
   email: string;
   email_verified_at: string | null;
   created_at: string;
   updated_at: string;
+};
+
+export type UserRegister = {
+  name: string;
+  email: string;
+  updated_at: string;
+  created_at: string;
+  id: number;
 };
 
 export type Token = {
@@ -20,7 +28,12 @@ export type Token = {
   plainTextToken: string;
 }
 
+export type RegisterResponse = {
+  userRegistered: UserRegister;
+  token: Token;
+}
+
 export type LoginResponse = {
-  user: User;
+  user: UserLogin;
   token: Token;
 }

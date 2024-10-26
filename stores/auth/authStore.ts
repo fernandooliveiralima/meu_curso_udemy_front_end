@@ -1,37 +1,44 @@
 import {defineStore} from 'pinia';
 import {useCookie, useRouter} from '#app';
 
-import type {UserRegister} from '@/types/auth/registerType';
-import type {UserLogin} from '@/types/auth/loginType';
-import type {User, Token, LoginResponse} from '@/types/auth/responseLogin';
+
+import type {FormLogin} from '@/types/auth/loginType';
+import type {UserLogin, UserRegister, RegisterResponse, LoginResponse} from '@/types/auth/responseLogin';
 
 export const useAuthStore = defineStore('authStore', ()=>{
 
   // Inicialize 'user' e 'token' com os tipos corretos
-  let user = ref<User | null>(null);
+  let user = ref<UserLogin | UserRegister | null>(null);
   let token = ref<string | null>(null);
   
-  const userCookie = useCookie<User | null>('user', { maxAge: 60 * 60 * 24 * 7 });
-  const tokenCookie = useCookie<string | null>('token', { maxAge: 60 * 60 * 24 * 7 });
+  /* (60) = representa 60 segundos, ou seja, 1 minuto. */
+  /* (60 * 60) = representa 60 minutos, ou seja, 1 hora. */
+  /* (60 * 60 * 24) =  representa 24 horas, ou seja, 1 dia. */
+  /* (60 * 60 * 24 * 7) =  representa 7 dias. */
+  const userCookie = ref( useCookie<UserLogin | UserRegister | null>('user', { maxAge: 60 * 60 * 24 * 7 }) );
+  const tokenCookie = ref( useCookie<string | null>('token', { maxAge: 60 * 60 * 24 * 7 }) );
+
 
   const router = useRouter();
 
   const register = async (userRegister: UserRegister)=>{
     try {
-      const response: LoginResponse = await $fetch('http://localhost:8000/api/register', {
+      const response: RegisterResponse = await $fetch('http://localhost:8000/api/register', {
         method:'POST',
         body:userRegister
       })
       
-      user.value = response.user
-      console.log('Response ->', response);
+      user.value = response.userRegistered;
+      userCookie.value = response.userRegistered;
+      console.log('User Register  ->', user.value);
+      console.log('User Cookie  ->', userCookie.value);
 
     } catch (error) {
       console.log('error ->', error)
     }
   };
 
-  const login = async (userLogin: UserLogin)=>{
+  const login = async (userLogin: FormLogin)=>{
     try {
       const response: LoginResponse = await $fetch('http://localhost:8000/api/login', {
         method:'POST',
@@ -45,7 +52,10 @@ export const useAuthStore = defineStore('authStore', ()=>{
       userCookie.value = response.user;
       tokenCookie.value = response.token.plainTextToken;
 
-      console.log('Login Response ->', response);
+      console.log('User Login', user.value);
+      console.log('Token Login', token.value);
+      console.log('User Cookie Login', userCookie.value);
+      console.log('Token Cookie Login', tokenCookie.value);
       /* router.push('/dashboard'); */
 
     } catch (error) {

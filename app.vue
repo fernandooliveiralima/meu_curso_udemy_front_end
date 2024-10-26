@@ -6,7 +6,7 @@
 <template>
   <div>
     <!-- <RegisterFormC/> -->
-    <LoginFormC/>
+    <!-- <LoginFormC/> -->
   </div>
 </template>
 
