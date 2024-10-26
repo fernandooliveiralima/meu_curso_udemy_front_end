@@ -1,13 +1,12 @@
 <script setup lang="ts">
-
-
-  
+  import RegisterFormC from '@/components/auth/RegisterFormC.vue';
+  import LoginFormC from '@/components/auth/LoginFormC.vue';
 </script>
-
 
 <template>
   <div>
-    <RegisterFormC/>
+    <!-- <RegisterFormC/> -->
+    <LoginFormC/>
   </div>
 </template>
 
@@ -16,12 +15,4 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-
-@layer components{
-  button{
-    @apply bg-green-800;
-  }
-}
-
 </style>

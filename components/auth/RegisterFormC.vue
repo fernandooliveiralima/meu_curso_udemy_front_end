@@ -19,7 +19,7 @@
     formRegister.password = ''
     formRegister.password_confirmation = ''
 
-    console.log(formRegister);
+    
   };
 </script>
 
