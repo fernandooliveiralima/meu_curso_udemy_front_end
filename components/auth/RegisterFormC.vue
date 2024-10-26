@@ -19,10 +19,8 @@
     userFormRegister.password = ''
     userFormRegister.password_confirmation = ''
 
-    
   };
 </script>
-
 
 <template>
   <div>
@@ -71,7 +69,6 @@
 
   </div>
 </template>
-
 
 <style scoped>
 @tailwind base;

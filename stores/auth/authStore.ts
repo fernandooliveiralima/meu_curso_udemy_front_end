@@ -3,7 +3,13 @@ import {useCookie, useRouter} from '#app';
 
 import type {FormRegister} from '@/types/auth/registerType';
 import type {FormLogin} from '@/types/auth/loginType';
-import type {UserLogin, UserRegister, RegisterResponse, LoginResponse} from '@/types/auth/responseLogin';
+import type {Logout} from '@/types/auth/logoutType';
+
+import type {
+  UserLogin, 
+  UserRegister, 
+  RegisterResponse, 
+  LoginResponse} from '@/types/auth/responseLogin';
 
 export const useAuthStore = defineStore('authStore', ()=>{
 
@@ -17,7 +23,6 @@ export const useAuthStore = defineStore('authStore', ()=>{
   /* (60 * 60 * 24 * 7) =  representa 7 dias. */
   const userCookie = ref( useCookie<UserLogin | UserRegister | null>('user', { maxAge: 60 * 60 * 24 * 7 }) );
   const tokenCookie = ref( useCookie<string | null>('token', { maxAge: 60 * 60 * 24 * 7 }) );
-
 
   const router = useRouter();
 
@@ -63,5 +68,34 @@ export const useAuthStore = defineStore('authStore', ()=>{
     }
   };
 
-  return {user, register, login};
+  const logout = async () => {
+    try {
+
+      const response: Logout = await $fetch(`http://localhost:8000/api/logout`, {
+            method: 'POST',
+            headers:{
+                'Authorization': `Bearer ${token.value}`
+            }
+            
+        })
+
+        user.value = null;
+        userCookie.value = null;
+        
+        token.value = null;
+        tokenCookie.value = null;
+
+        console.log(response);
+
+    } catch (error: unknown) {
+        console.log('Erro ao fazer login:', error);
+    }
+};
+
+  return {
+    user, 
+    register, 
+    login, 
+    logout
+  };
 });
