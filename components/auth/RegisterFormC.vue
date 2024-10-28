@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import type {FormRegister} from '@/types/auth/registerType';
-  import {useAuthStore} from '@/stores/auth/authStore';
 
+  import {useAuthStore} from '@/stores/auth/authStore';
   const authStoreInstance = useAuthStore();
 
   const userFormRegister = reactive<FormRegister>({
@@ -14,72 +14,75 @@
   const submitRegister = async ()=>{
     await authStoreInstance.register(userFormRegister);
 
-    userFormRegister.name = ''
-    userFormRegister.email = ''
-    userFormRegister.password = ''
-    userFormRegister.password_confirmation = ''
-
-  };
+    userFormRegister.name = '';
+    userFormRegister.email = '';
+    userFormRegister.password = '';
+    userFormRegister.password_confirmation = '';
+  }
 </script>
+
 
 <template>
   <div>
-  
+    
     <section class="form-container">
       <form @submit.prevent="submitRegister">
 
         <div class="form-inputs">
           <input 
-          type="text" 
-          name="name" id="name" 
-          placeholder="Register Name"
-          v-model="userFormRegister.name"/>
+            type="text" 
+            name="name" 
+            id="name"
+            placeholder="Register Name"
+            v-model="userFormRegister.name" />
         </div>
 
         <div class="form-inputs">
           <input 
-          type="email" 
-          name="email" 
-          id="email" 
-          placeholder="Register Email"
-          v-model="userFormRegister.email"/>
+            type="email" 
+            name="email" 
+            id="email"
+            placeholder="Register Email"
+            v-model="userFormRegister.email" />
         </div>
 
         <div class="form-inputs">
           <input 
-          type="password" 
-          name="password" 
-          id="password" 
-          placeholder="Register Password"
-          v-model="userFormRegister.password"/>
+            type="password" 
+            name="password" 
+            id="password"
+            placeholder="Register Password"
+            v-model="userFormRegister.password" />
         </div>
 
         <div class="form-inputs">
           <input 
-          type="password" 
-          name="password_confirmation" 
-          id="password_confirmation" 
-          placeholder="Password Confirmation"
-          v-model="userFormRegister.password_confirmation"/>
+            type="password" 
+            name="password_confirmation" 
+            id="password_confirmation"
+            placeholder="Password Confirmation"
+            v-model="userFormRegister.password_confirmation" />
         </div>
 
         <button type="submit">Register</button>
+
       </form>
     </section>
 
   </div>
 </template>
 
+
 <style scoped>
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-
 @layer components{
   .form-container{
     @apply
-    h-full flex flex-col items-center justify-center;
+    h-full
+    flex flex-col items-center justify-between;
   }
 
   form{
@@ -87,7 +90,7 @@
     bg-slate-700
     rounded-md
     h-[20rem]
-    flex flex-col items-start justify-between
+    flex flex-col items-center justify-between
     px-10 py-3;
   }
 
@@ -98,11 +101,11 @@
   .form-inputs > input{
     @apply
     w-64
-     bg-slate-600
-     p-1
-     outline-none
-     rounded-md
-     mt-1;
+    bg-slate-600
+    p-1
+    outline-none
+    rounded-md
+    mt-1;
   }
 
   form > button{
@@ -116,11 +119,12 @@
     text-lg;
   }
 
-}
+};
 
 @layer utilities{
   .form-inputs > input{
     @apply placeholder:text-gray-400;
   }
 }
+
 </style>

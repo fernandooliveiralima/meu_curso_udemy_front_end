@@ -16,9 +16,6 @@ const submitLogin = async () => {
   userFormLogin.password = '';
 }
 
-const userLogout = async () => {
-  await authStoreInstance.logout();
-}
 </script>
 
 
@@ -49,7 +46,7 @@ const userLogout = async () => {
       </form>
     </section>
 
-    <button @click="userLogout" type="button">Logout</button>
+    <button @click="authStoreInstance.logout" type="button">Logout</button>
   </div>
 </template>
 

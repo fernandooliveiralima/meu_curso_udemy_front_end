@@ -1,12 +1,11 @@
 <script setup lang="ts">
-  import RegisterFormC from '@/components/auth/RegisterFormC.vue';
-  import LoginFormC from '@/components/auth/LoginFormC.vue';
+  import loginFormC from '@/components/auth/loginFormC.vue';
+  
 </script>
 
 <template>
   <div>
-    <!-- <RegisterFormC/> -->
-    <LoginFormC/>
+    <loginFormC/>
   </div>
 </template>
 

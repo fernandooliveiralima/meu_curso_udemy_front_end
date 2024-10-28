@@ -1,10 +1,9 @@
-export type UserLogin = {
-  id: number;
+export type UserRegister = {
   name: string;
   email: string;
-  email_verified_at: string | null;
-  created_at: string;
   updated_at: string;
+  created_at: string;
+  id: number;
 };
 
 export type Token = {
@@ -20,7 +19,8 @@ export type Token = {
   plainTextToken: string;
 }
 
-export type LoginResponse = {
-  user: UserLogin;
+export type RegisterResponse = {
+  userRegistered: UserRegister;
   token: Token;
 }
+
