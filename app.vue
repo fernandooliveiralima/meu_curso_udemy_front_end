@@ -1,17 +1,22 @@
-<script setup lang="ts">
-  import loginFormC from '@/components/auth/loginFormC.vue';
-  
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <div>
-    <loginFormC/>
+    <NuxtLayout>
+      <NuxtPage/>
+    </NuxtLayout>
   </div>
 </template>
-
 
 <style scoped>
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  div{
+    @apply min-h-screen bg-slate-800;
+  }
+}
+
 </style>

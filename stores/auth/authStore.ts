@@ -63,7 +63,6 @@ export const useAuthStore = defineStore('authStore', ()=>{
       const response = await $fetch('http://localhost:8000/api/logout', {
         method:'POST',
         headers:{
-          'Accept':'application/json',
           'Authorization':`Bearer ${token.value}`
         }
       })
@@ -77,6 +76,7 @@ export const useAuthStore = defineStore('authStore', ()=>{
   return {
     user,
     userCookie,
+    token,
     register,
     login,
     logout

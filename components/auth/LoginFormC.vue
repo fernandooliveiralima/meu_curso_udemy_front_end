@@ -46,7 +46,7 @@ const submitLogin = async () => {
       </form>
     </section>
 
-    <button @click="authStoreInstance.logout" type="button">Logout</button>
+    
   </div>
 </template>
 
