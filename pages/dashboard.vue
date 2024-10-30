@@ -1,10 +1,16 @@
 <script setup lang="ts">
+  import infoCardsC from '@/components/transactions/infoCardsC.vue';
   
 </script>
   
 <template>
   <div>
-  Dashboard Page
+    <navBarC/>
+    <section class="transactions-components">
+      <div class="cards-lineChart">
+        <infoCardsC/>
+        </div>
+    </section>
   </div>
 </template>
   
@@ -13,5 +19,16 @@
 @tailwind components;
 @tailwind utilities;
   
-@layer components{};
+@layer components{
+  .transactions-components{
+    @apply flex flex-col items-center;
+  }
+
+  .cards-lineChart{
+    @apply
+    w-full
+    flex items-center justify-between;
+  }
+
+};
 </style>

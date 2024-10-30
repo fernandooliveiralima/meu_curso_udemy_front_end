@@ -26,6 +26,7 @@ const submitLogin = async () => {
       <form @submit.prevent="submitLogin">
 
         <div class="form-inputs">
+          
           <input 
           type="email" 
           name="email" 
@@ -35,6 +36,7 @@ const submitLogin = async () => {
         </div>
 
         <div class="form-inputs">
+          
           <input 
           type="password" 
           name="password" id="password" 
@@ -63,39 +65,40 @@ const submitLogin = async () => {
     flex flex-col items-center justify-center;
   }
 
-  form {
-    @apply 
-    bg-slate-700 
-    h-64 flex 
-    flex-col items-start justify-between 
-    px-10 py-3 
-    rounded-md;
+  form{
+    @apply
+    bg-slate-700
+    rounded-md
+    h-[20rem]
+    flex flex-col items-center justify-between
+    px-10 py-3;
   }
 
   .form-inputs {
     @apply flex flex-col;
   }
 
-  .form-inputs>label {
-    @apply text-white text-lg font-semibold;
-  }
+  
 
-  .form-inputs>input {
-    @apply 
-    w-64 
-    bg-slate-600 
-    p-1 
-    outline-none 
-    rounded-md 
+  .form-inputs > input{
+    @apply
+    w-64
+    bg-slate-600
+    p-1
+    outline-none
+    rounded-md
     mt-1;
   }
 
-  form>button {
-    @apply 
-    bg-blue-700 
-    px-16 py-1 
-    rounded-md 
-    font-semibold text-white text-lg;
+  form > button{
+    @apply
+    bg-blue-700
+    px-16
+    py-1
+    rounded-md
+    font-semibold
+    text-white
+    text-lg;
   }
 }
 

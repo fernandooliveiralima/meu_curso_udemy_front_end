@@ -4,7 +4,7 @@
   
 <template>
   <div class="register-body">
-
+    <navBarC/>
     <div class="register-content">
       <registerFormC/>
     </div>
@@ -20,7 +20,7 @@
 @layer components{
   .register-content{
     @apply
-    min-h-screen
+    h-[calc(100vh-4rem)]
     flex items-center justify-center;
   }
 };

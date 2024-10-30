@@ -4,7 +4,8 @@
   
 <template>
   <div>
-  Home Page
+    <navBarC/>
+    <h1>Home Page</h1>
   </div>
 </template>
   
@@ -14,8 +15,6 @@
 @tailwind utilities;
   
 @layer components{
-  div{
-    @apply text-white;
-  }
-};
+  
+}
 </style>

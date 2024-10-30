@@ -4,7 +4,8 @@
   
 <template>
   <div>
-  Transactions Page
+    <navBarC/>
+    <h1>Transactions Page</h1>
   </div>
 </template>
   
@@ -13,5 +14,7 @@
 @tailwind components;
 @tailwind utilities;
   
-@layer components{};
+@layer components{
+  
+};
 </style>

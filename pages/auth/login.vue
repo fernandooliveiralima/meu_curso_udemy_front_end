@@ -4,6 +4,7 @@
   
 <template>
   <div class="login-body">
+    <navBarC/>
     <div class="login-content">
       <loginFormC/>
     </div>
@@ -16,10 +17,15 @@
 @tailwind utilities;
   
 @layer components{
+
+  .login-body{
+    @apply flex flex-col;
+  }
+
   .login-content{
     @apply
-    min-h-screen
-    flex items-center justify-center;
+    h-[calc(100vh-4rem)]
+    flex flex-col items-center justify-center;
   }
 };
 </style>
