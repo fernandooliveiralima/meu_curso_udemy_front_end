@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import infoCardsC from '@/components/transactions/infoCardsC.vue';
 import lineChartC from '@/components/transactions/lineChartC.vue';
-import formTransactionsC from '@/components/transactions/formTransactionsC.vue'
+import formTransactionsC from '@/components/transactions/formTransactionsC.vue';
+import doughnutChartC from '@/components/transactions/doughnutChartC.vue';
 </script>
 
 <template>
@@ -15,6 +16,7 @@ import formTransactionsC from '@/components/transactions/formTransactionsC.vue'
 
       <div class="form-donut">
         <formTransactionsC/>
+        <doughnutChartC/>
       </div>
     </section>
   </div>
