@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import infoCardsC from '@/components/transactions/infoCardsC.vue';
-  
+  import lineChartC from '@/components/transactions/lineChartC.vue'
 </script>
   
 <template>
@@ -9,6 +9,7 @@
     <section class="transactions-components">
       <div class="cards-lineChart">
         <infoCardsC/>
+        <lineChartC/>
         </div>
     </section>
   </div>

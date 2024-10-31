@@ -31,10 +31,10 @@
         </div>
       </section>
 
-      <!-- <li class="user-section">
-        <small>Fernando</small>
-        <small>User Icon</small>
-      </li> -->
+      <li class="user-section">
+        <div class="user-name">Fernando</div>
+        <div class="user-icon">User Icon</div>
+      </li>
     </ul>
 
   </div>
@@ -81,6 +81,12 @@
     @apply
     w-[10%]
     flex items-center justify-between;
+  }
+  .user-name{
+    @apply
+    font-sans
+    font-semibold 
+    text-xl;
   }
 
 };
