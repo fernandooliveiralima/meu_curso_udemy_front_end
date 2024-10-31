@@ -1,40 +1,44 @@
 <script setup lang="ts">
-  
+  import userC from '@/components/auth/userC.vue';
 </script>
   
 <template>
   <div class="navbar-body">
   
     <ul class="list-container">
-      <div class="logo-container">Logo</div>
+      <div class="logo-menu">
 
-      <section class="navbar-content">
-        <div class="list-items">
-          <li>
-            <NuxtLink to="/">Home</NuxtLink>
-          </li>
-          <li>
-            <NuxtLink to="/auth/login">Login</NuxtLink>
-          </li>
-          <li>
-            <NuxtLink to="/auth/register">Register</NuxtLink>
-          </li>
-          <li>
-            <NuxtLink>Logout</NuxtLink>
-          </li>
-          <li>
-            <NuxtLink to="/dashboard">Dashboard</NuxtLink>
-          </li>
-          <li>
-            <NuxtLink to="/transactions">Transactions</NuxtLink>
-          </li>
-        </div>
-      </section>
+        <div class="logo-container">Logo</div>
+  
+        <section class="navbar-content">
+          <div class="list-items">
+            <li>
+              <NuxtLink to="/">Home</NuxtLink>
+            </li>
+            <li>
+              <NuxtLink to="/auth/login">Login</NuxtLink>
+            </li>
+            <li>
+              <NuxtLink to="/auth/register">Register</NuxtLink>
+            </li>
+            <li>
+              <NuxtLink>Logout</NuxtLink>
+            </li>
+            <li>
+              <NuxtLink to="/dashboard">Dashboard</NuxtLink>
+            </li>
+            <li>
+              <NuxtLink to="/transactions">Transactions</NuxtLink>
+            </li>
+          </div>
+        </section>
 
+      </div>
       <li class="user-section">
-        <div class="user-name">Fernando</div>
-        <div class="user-icon">User Icon</div>
+        <small class="user-name">Fernando</small>
+        <div class="user-icon"> <userC/> </div>
       </li>
+
     </ul>
 
   </div>
@@ -52,6 +56,12 @@
     bg-slate-600
     flex items-center justify-between;
   }
+
+  .logo-menu{
+    @apply
+    w-[80%]
+    flex items-center justify-between;
+    }
 
   .logo-container{
     @apply
@@ -73,20 +83,21 @@
   .list-items{
     @apply
     text-black
-    w-[80%]
+    w-full
     flex items-center justify-between;
   }
 
   .user-section{
     @apply
-    w-[10%]
-    flex items-center justify-between;
+    w-40
+    flex items-center justify-between
+    px-3;
   }
   .user-name{
     @apply
     font-sans
-    font-semibold 
-    text-xl;
+    font-semibold
+    text-lg;
   }
 
 };
