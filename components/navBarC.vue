@@ -1,5 +1,11 @@
 <script setup lang="ts">
+  import { storeToRefs } from 'pinia';
+  import {useAuthStore} from '@/stores/auth/authStore';
   import userC from '@/components/auth/userC.vue';
+
+  const authStoreInstance = useAuthStore();
+  const {userCookie, tokenCookie} = storeToRefs(authStoreInstance);
+
 </script>
   
 <template>
@@ -15,13 +21,13 @@
             <li>
               <NuxtLink to="/">Home</NuxtLink>
             </li>
-            <li>
+            <li v-if="!userCookie">
               <NuxtLink to="/auth/login">Login</NuxtLink>
             </li>
-            <li>
+            <li v-if="!userCookie">
               <NuxtLink to="/auth/register">Register</NuxtLink>
             </li>
-            <li>
+            <li @click="authStoreInstance.logout()">
               <NuxtLink>Logout</NuxtLink>
             </li>
             <li>
@@ -35,7 +41,7 @@
 
       </div>
       <li class="user-section">
-        <small class="user-name">Fernando</small>
+        <small v-if="userCookie && tokenCookie" class="user-name">{{ userCookie.name }}</small>
         <div class="user-icon"> <userC/> </div>
       </li>
 
@@ -85,6 +91,9 @@
     text-black
     w-full
     flex items-center justify-between;
+  }
+  .list-items li{
+    @apply cursor-pointer;
   }
 
   .user-section{

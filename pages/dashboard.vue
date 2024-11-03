@@ -1,4 +1,8 @@
 <script setup lang="ts">
+definePageMeta({
+  middleware:'auth'
+});
+
 import infoCardsC from '@/components/transactions/infoCardsC.vue';
 import lineChartC from '@/components/transactions/lineChartC.vue';
 import formTransactionsC from '@/components/transactions/formTransactionsC.vue';

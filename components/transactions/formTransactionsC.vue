@@ -82,7 +82,10 @@
 
 @layer components {
   .form-transactions {
-    @apply bg-slate-700 mt-16 ml-3 rounded-md;
+    @apply 
+    bg-slate-700 
+    mt-16 
+    ml-3 rounded-md;
   }
 
   .title-transactionsType{
@@ -126,11 +129,15 @@
 
   .form-fields{
     @apply
-    w-[70rem] flex items-center justify-between;
+    w-[70rem] 
+    flex items-center justify-between;
   }
 
   form {
-    @apply h-[20rem] flex flex-col items-start justify-between px-10 py-3;
+    @apply 
+    h-[20rem] 
+    flex flex-col items-start justify-between 
+    px-10 py-3;
   }
 
   .form-inputs {
@@ -145,7 +152,12 @@
   }
 
   .form-inputs>input {
-    @apply w-64 bg-slate-500 p-1 outline-none rounded-md mt-1;
+    @apply w-64 
+    bg-slate-500 
+    p-1 
+    outline-none 
+    rounded-md 
+    mt-1;
   }
 
   form>button {

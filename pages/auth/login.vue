@@ -1,5 +1,13 @@
 <script setup lang="ts">
-  import loginFormC from '@/components/auth/loginFormC.vue'
+  import loginFormC from '@/components/auth/loginFormC.vue';
+
+  import {useAuthStore} from '@/stores/auth/authStore';
+  const authStoreInstance = useAuthStore();
+  const {user, userCookie} = storeToRefs(authStoreInstance);
+
+  /* onMounted(()=>{
+    console.log('login ->', user.value)
+  }) */
 </script>
   
 <template>
@@ -7,7 +15,9 @@
     <navBarC/>
     <div class="login-content">
       <loginFormC/>
+      <!--  -->
     </div>
+
   </div>
 </template>
   

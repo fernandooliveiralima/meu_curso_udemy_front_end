@@ -1,11 +1,22 @@
 <script setup lang="ts">
-  
+definePageMeta({
+  middleware:'auth'
+});
+
+import inputDateInfoC from '~/components/transactions/inputDateInfoC.vue';
+import tableInfoC from '~/components/transactions/tableInfoC.vue';
 </script>
   
 <template>
-  <div>
+  <div class="transactions-body">
     <navBarC/>
-    <h1>Transactions Page</h1>
+    
+    <section class="transactions-list">
+      <div>
+        <inputDateInfoC/>
+        <tableInfoC/>
+      </div>
+    </section>
   </div>
 </template>
   
@@ -13,8 +24,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-  
-@layer components{
-  
-};
+
+.transactions-body {
+  @apply h-screen bg-slate-800;
+}
+
+.transactions-list {
+  @apply 
+  w-full 
+  mt-24 
+  flex flex-col items-center justify-between;
+}
 </style>
