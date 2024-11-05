@@ -1,33 +1,77 @@
 <script setup lang="ts">
+import {storeToRefs} from 'pinia';
+import { useToast } from 'vue-toastification';
+import {useTransactionsStore} from '@/stores/transactions/transactionsStore';
 
+const transactionsStoreInstance = useTransactionsStore();
+const {
+  formAddTransactions,
+  containerAllTransactions
+} = storeToRefs(transactionsStoreInstance);
+
+const toast = useToast();
+
+const saveTransaction = ()=>{
+  if(formAddTransactions.value.transaction_name === '' || formAddTransactions.value.transaction_amount === undefined){
+    toast.error('Fill The Fields');
+    return;
+  }else if(formAddTransactions.value.transaction_type === 'expense'){
+    formAddTransactions.value.transaction_amount *= -1;
+  }
+
+  const transaction = {
+    id: formAddTransactions.value.id++,
+    transaction_name: formAddTransactions.value.transaction_name,
+    transaction_date: formAddTransactions.value.transaction_date,
+    transaction_category: formAddTransactions.value.transaction_category,
+    transaction_amount: formAddTransactions.value.transaction_amount,
+    transaction_type: formAddTransactions.value.transaction_type,
+  }
+
+  transactionsStoreInstance.addTransactions(transaction);
+
+  formAddTransactions.value.transaction_name = '';
+  formAddTransactions.value.transaction_amount = undefined;
+  formAddTransactions.value.transaction_type = '';
+
+  console.log('container transactions', containerAllTransactions.value);
+}
 </script>
 
 <template>
   <div>
 
-    <form class="form-transactions">
+    <form @submit.prevent="saveTransaction" class="form-transactions">
 
       <div class="title-transactionsType">
         <span class="title">Form Transactions</span>
         <div class="inputs-transactionsType">
           <div class="section-income">
-            <label class="income-label" for="income">Income</label>
+            <label 
+              class="income-label" 
+              for="income">Income</label>
+
             <input 
               class="income-input" 
               type="radio" 
               name="income" 
               id="income" 
-              value="income"/>
+              value="income"
+              v-model="formAddTransactions.transaction_type" />
           </div>
 
           <div class="section-expense">
-            <label class="expense-label" for="expense">Expense</label>
+            <label 
+              class="expense-label" 
+              for="expense">Expense</label>
+
             <input 
               class="expense-input" 
               type="radio" 
               name="expense" 
               id="expense" 
-              value="expense"/>
+              value="expense"
+              v-model="formAddTransactions.transaction_type"/>
           </div>
 
         </div>
@@ -42,7 +86,8 @@
             type="text" 
             name="name" 
             id="name" 
-            placeholder="description"/>
+            placeholder="description"
+            v-model="formAddTransactions.transaction_name"/>
         </div>
 
         <div class="form-inputs">
@@ -53,7 +98,8 @@
             id="amount" 
             placeholder="Amount" 
             min="0" 
-            step="0.01"/>
+            step="0.01"
+            v-model.number="formAddTransactions.transaction_amount"/>
         </div>
 
         <div class="form-inputs">
@@ -62,7 +108,7 @@
             type="date" 
             name="date" 
             id="date" 
-            placeholder="Register Password"/>
+            v-model="formAddTransactions.transaction_date"/>
         </div>
 
       </div>
