@@ -79,6 +79,26 @@ export const useTransactionsStore = defineStore('transactionsStore', () => {
   };
   /* Add Transactions */
 
+  /* load all transactions */
+  const loadAllTransactions = async ()=>{
+    try {
+      const response: Array<TransactionResponse> = await $fetch('http://localhost:8000/api/transactions', {
+        method:'GET',
+        headers:{
+          'Authorization':`Bearer ${tokenCookie.value}`,
+          'Accept':'application/json'
+        }
+      });
+
+      containerAllTransactions.value = response;
+      console.log('loadAllTransactions() store ->', response);
+    } catch (error) {
+      
+    }
+  };
+  /* load all transactions */
+  
+
   /* Crud Actions */
 
   return{
@@ -86,7 +106,8 @@ export const useTransactionsStore = defineStore('transactionsStore', () => {
     formAddTransactions,
     containerAllTransactions,
 
-    addTransactions
+    addTransactions,
+    loadAllTransactions
   }
 
 });

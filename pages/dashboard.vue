@@ -7,6 +7,13 @@ import infoCardsC from '@/components/transactions/infoCardsC.vue';
 import lineChartC from '@/components/transactions/lineChartC.vue';
 import formTransactionsC from '@/components/transactions/formTransactionsC.vue';
 import doughnutChartC from '@/components/transactions/doughnutChartC.vue';
+
+import {useTransactionsStore} from '@/stores/transactions/transactionsStore';
+const transactionsStoreInstance = useTransactionsStore();
+
+onMounted( async ()=>{
+  await transactionsStoreInstance.loadAllTransactions();
+});
 </script>
 
 <template>

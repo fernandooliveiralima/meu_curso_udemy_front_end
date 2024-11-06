@@ -5,6 +5,13 @@ definePageMeta({
 
 import inputDateInfoC from '~/components/transactions/inputDateInfoC.vue';
 import tableInfoC from '~/components/transactions/tableInfoC.vue';
+
+import {useTransactionsStore} from '@/stores/transactions/transactionsStore';
+const transactionsStoreInstance = useTransactionsStore();
+
+onMounted( async ()=>{
+  await transactionsStoreInstance.loadAllTransactions();
+});
 </script>
   
 <template>
