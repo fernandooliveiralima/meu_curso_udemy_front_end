@@ -1,4 +1,12 @@
-<script setup></script>
+<script setup lang="ts">
+import {storeToRefs} from 'pinia';
+import {useTransactionsStore} from '@/stores/transactions/transactionsStore';
+
+/* Variables Pinia */
+const transactionStoreInstance = useTransactionsStore();
+const {totalTransactions, incomes, expenses} = storeToRefs(transactionStoreInstance);
+/* Variables Pinia */
+</script>
 
 <template>
     <div>
@@ -7,17 +15,23 @@
 
             <div class="card-default-style balance-card">
                 <h4>Balance Total</h4>
-                <span>$ 0,00</span>
+                <span>
+                    {{ transactionStoreInstance.formatAmounts(totalTransactions) }}
+                </span>
             </div>
 
             <div class="card-default-style income-card">
                 <h4>Income</h4>
-                <span>$ 0,00</span>
+                <span>
+                    {{ transactionStoreInstance.formatAmounts(incomes) }}
+                </span>
             </div>
 
             <div class="card-default-style expense-card">
                 <h4>Expenses</h4>
-                <span>$ 0,00</span>
+                <span>
+                    {{ transactionStoreInstance.formatAmounts(expenses) }}
+                </span>
             </div>
 
         </div>

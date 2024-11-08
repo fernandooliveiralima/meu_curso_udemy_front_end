@@ -32,7 +32,7 @@ const saveTransaction = ()=>{
 
   formAddTransactions.value.transaction_name = '';
   formAddTransactions.value.transaction_amount = undefined;
-  formAddTransactions.value.transaction_type = '';
+  formAddTransactions.value.transaction_type = 'income';
 
   console.log('container transactions', containerAllTransactions.value);
 }

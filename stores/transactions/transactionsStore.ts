@@ -24,7 +24,7 @@ export const useTransactionsStore = defineStore('transactionsStore', () => {
   });
 
   let containerAllTransactions = ref< Array<transactionType> >([
-    {
+    /* {
       id:0,
       transaction_name: 'Freelnacer',
       transaction_date: '2023-02-28',
@@ -52,7 +52,7 @@ export const useTransactionsStore = defineStore('transactionsStore', () => {
       transaction_amount: -78,
       transaction_type: 'expense'
       
-    },
+    }, */
   ]);
 
   /* Crud Actions */
@@ -71,6 +71,7 @@ export const useTransactionsStore = defineStore('transactionsStore', () => {
       });
 
       containerAllTransactions.value.unshift(response);
+      updateFilteredList();
       toast.success('Transaction Added')
     } catch (error) {
       const toast = useToast();
@@ -91,6 +92,7 @@ export const useTransactionsStore = defineStore('transactionsStore', () => {
       });
 
       containerAllTransactions.value = response;
+      updateFilteredList();
       console.log('loadAllTransactions() store ->', response);
     } catch (error) {
       
@@ -98,16 +100,126 @@ export const useTransactionsStore = defineStore('transactionsStore', () => {
   };
   /* load all transactions */
   
+ 
+  /* Update Transactions */
+    const currentTransaction = ref<transactionType | null>(null);
+    const editTransaction = (transaction: transactionType)=>{
+      currentTransaction.value = {...transaction}
+    }
 
+    const updateTransactions = async ()=>{
+      const toast = useToast()
+      if(currentTransaction.value){
+
+        if( (currentTransaction.value.transaction_type==='income' && Number(currentTransaction.value.transaction_amount) <0) || 
+        (currentTransaction.value.transaction_type==='expense' && Number(currentTransaction.value.transaction_amount) >0)
+        ){
+          toast.error('The Value and Type Must be The Same')
+        }
+
+        try {
+          const response: TransactionResponse = await $fetch(`http://localhost:8000/api/transactions/${currentTransaction.value.id}`, {
+            method:'PUT',
+            body:currentTransaction.value,
+            headers:{
+              'Authorization':`Bearer ${tokenCookie.value}`,
+              'Accept':'application/json'
+            }
+          });
+
+          const index = containerAllTransactions.value.findIndex(item => item.id === currentTransaction.value!.id);
+          if(index !== -1){
+            containerAllTransactions.value[index] = {...currentTransaction.value};
+            updateFilteredList();
+          };
+        } catch (error) {
+          console.log(error)
+        }
+
+      }
+
+    };
+  /* Update Transactions */
+
+  /* Remove Transactions */
+  const removeTransactions = async (id: number)=>{
+    const toast = useToast();
+    try {
+      await $fetch(`http://localhost:8000/api/transactions/${id}`, {
+        method:'DELETE',
+        headers:{
+          'Authorization':`Bearer ${tokenCookie.value}`,
+          'Accept':'application/json'
+        }
+      });
+
+      containerAllTransactions.value = containerAllTransactions.value.filter(item => item.id !== id);
+      filteredList.value = filteredList.value.filter(item => item.id !== id);
+      updateFilteredList();
+      toast.success('Transaction Removed');
+    } catch (error) {
+      console.log(error)
+    }
+  };
+  /* Remove Transactions */
+
+  
   /* Crud Actions */
+  
+  /* Computed Amounts */
+  const totalTransactions = computed(()=>{
+    const totalValue = filteredList.value.length > 0
+      ? filteredList.value
+      .map((item) => item.transaction_amount)
+      .reduce((acc, amount) => Number(acc) + Number(amount), 0) : 0
+      return Number(totalValue);
+  });
+
+  const incomes = computed(()=>{
+    const incomesValue = filteredList.value
+    .filter((amount) => Number(amount.transaction_amount) > 0)
+    .map((income) => income.transaction_amount)
+    .reduce((acc, income) => Number(acc) + Number(income),0)
+    return Number(incomesValue);
+  })
+
+  const expenses = computed(()=>{
+    const expensesValue = filteredList.value
+    .filter((amount) => Number(amount.transaction_amount) < 0)
+    .map((expense) => expense.transaction_amount)
+    .reduce((acc, expense) => Number(acc) + Number(expense),0)
+    return Number(expensesValue);
+  })
+  /* Computed Amounts */
+  
+  const updateFilteredList = ()=>{
+    return filteredList.value = filterListByTime(formAddTransactions.transaction_date, 
+      containerAllTransactions.value)
+  };
+
+  const formatAmounts = (amount: number)=>{
+    return new Intl.NumberFormat('en-US', {style: 'currency', currency:'USD'}).format(amount);
+  }
+
+  watch([containerAllTransactions, formAddTransactions.transaction_date], ()=>{
+    updateFilteredList();
+  });
 
   return{
     filteredList,
     formAddTransactions,
     containerAllTransactions,
+    totalTransactions,
+    incomes,
+    expenses,
 
     addTransactions,
-    loadAllTransactions
+    loadAllTransactions,
+    updateTransactions,
+    editTransaction,
+    removeTransactions,
+    updateFilteredList,
+    formatAmounts
   }
 
 });

@@ -1,9 +1,19 @@
 <script setup lang="ts">
+import {storeToRefs} from 'pinia';
+  import type {transactionType} from '@/types/transactions/transactionType';
+
   import editInfoC from './editInfoC.vue';
   import removeInfoC from './removeInfoC.vue';
   import editTransactionsFormC from './editTransactionsFormC.vue';
 
-  const showModal = ref(false);
+  import {useTransactionsStore} from '@/stores/transactions/transactionsStore';
+  const transactionStoreInstance = useTransactionsStore();
+  const { filteredList } = storeToRefs(transactionStoreInstance);
+
+  // Estado para controlar a exibição do modal
+  const isModalOpen = ref(false);
+
+  
 </script>
   
 <template>
@@ -49,10 +59,10 @@
     </section>
 
     <!-- Modal de Edição -->
-    <div v-if="showModal" class="modal-container">
+    <div v-if="isModalOpen" class="modal-container">
       <div class="modal-overlay modal-overlay-config"></div>
       <div class="body-modal body-modal-config">
-        <editTransactionsFormC/>
+        <editTransactionsFormC /> <!-- Componente do formulário de edição -->
       </div>
     </div>
   </div>

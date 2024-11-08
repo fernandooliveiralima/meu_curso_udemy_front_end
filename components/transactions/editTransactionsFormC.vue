@@ -1,10 +1,13 @@
 <script setup lang="ts">
+import {useTransactionsStore} from '@/stores/transactions/transactionsStore';
+const transactionStoreInstance = useTransactionsStore();
+
 
 </script>
 
 <template>
   <div>
-    <form class="form">
+    <form  class="form">
       <h3>Edit Transaction</h3>
       <div class="form-inputs">
         <label for="name">Name</label>
