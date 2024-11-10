@@ -1,6 +1,14 @@
+<script setup lang="ts">
+import {storeToRefs} from 'pinia';
+import { useTransactionsStore } from '@/stores/transactions/transactionsStore';
+
+const transactionsStoreInstance = useTransactionsStore();
+const {formAddTransactions} = storeToRefs(transactionsStoreInstance);
+</script>
+
 <template>
   <div class="input-date">
-    <input type="date" name="" id=""/>
+    <input type="date" v-model="formAddTransactions.transaction_date"/>
   </div>
 </template>
 

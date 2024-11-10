@@ -1,6 +1,12 @@
 <script setup lang="ts">
+import {storeToRefs} from 'pinia';
 import { Chart } from 'chart.js/auto';
 import percentualValueC from './percentualValueC.vue'
+
+import { useTransactionsStore } from '@/stores/transactions/transactionsStore';
+
+const transactionsStoreInstance = useTransactionsStore();
+const {filteredList} = storeToRefs(transactionsStoreInstance);
 
 const myChart = ref<HTMLCanvasElement | null>(null);
 let doughnutChart: Chart<"doughnut", number[], string> | null = null;
@@ -14,7 +20,7 @@ const createChart = () => {
       data: {
         labels: ['Income', 'Expense'],
         datasets: [{
-          data: [10, 2],  // Inicializando com valores padrão
+          data: [], 
           borderWidth: 0,
           hoverOffset: 5,
           backgroundColor: ['green', 'crimson'],
@@ -28,8 +34,32 @@ const createChart = () => {
   }
 };
 
+const updateDoughnutChart = ()=>{
+  if(doughnutChart){
+    let totalIncome = 0;
+    let totalExpense = 0;
+
+    filteredList.value.forEach((transaction)=>{
+      if(Number(transaction.transaction_amount) > 0){
+        totalIncome += Number(transaction.transaction_amount)
+      }else{
+        totalExpense += Number(transaction.transaction_amount)
+      }
+    })
+
+    doughnutChart.data.datasets[0].data = [totalIncome, totalExpense];
+    doughnutChart.update();
+  }
+
+};
+
+watch(filteredList, ()=>{
+  updateDoughnutChart();
+})
+
 onMounted(() => {
   createChart();
+  updateDoughnutChart();
 })
 </script>
 
@@ -38,7 +68,7 @@ onMounted(() => {
 
     <section class="doughnut-chart">
       <div class="chart">
-        <percentualValueC/>
+        <percentualValueC />
         <canvas ref="myChart"></canvas>
       </div>
     </section>

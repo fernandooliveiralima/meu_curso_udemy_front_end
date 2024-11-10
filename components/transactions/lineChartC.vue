@@ -1,5 +1,11 @@
 <script setup lang="ts">
+import {storeToRefs} from 'pinia';
 import { Chart } from 'chart.js/auto';
+
+import {useTransactionsStore} from '@/stores/transactions/transactionsStore';
+
+const transactionsStoreInstance = useTransactionsStore();
+const {filteredList} = storeToRefs(transactionsStoreInstance);
 
 const myChart = ref<HTMLCanvasElement | null>();
 let lineChart: Chart<'line', number[], string> | null = null;
@@ -11,7 +17,7 @@ const createLineChart = () => {
     lineChart = new Chart(ctx, {
       type: 'line',
       data: {
-        labels: ['teste 1', 'teste 2', 'teste 3'], // Inicialmente vazio
+        labels: [], // Inicialmente vazio
         datasets: [{
           label: 'Behavior Transactions',
           data: [65, 69, 7],
@@ -36,9 +42,47 @@ const createLineChart = () => {
   }
 };
 
+/* Update LineChart */
+const updateLineChart = ()=>{
+  if(lineChart && filteredList.value){
+    let allTransactions = [...filteredList.value];
+    allTransactions.sort( (a,b)=> Number( new Date(a.transaction_date) ) - Number( new Date(b.transaction_date) ) )
+
+    let totalAmount = 0;
+    let datesTransactions: Array<string> = [];
+    let amountsTransactions: Array<number> = [];
+    let borderColorGraph: Array<string> = [];
+
+    allTransactions.forEach((transaction) => {
+      datesTransactions.push(transaction.transaction_date);
+      totalAmount += Number(transaction.transaction_amount);
+      amountsTransactions.push(totalAmount);
+
+      if(transaction.transaction_type === 'income'){
+        borderColorGraph.push('green')
+      }else if(transaction.transaction_type === 'expense'){
+        borderColorGraph.push('crimson')
+      }
+
+    })
+
+    lineChart.data.labels = datesTransactions;
+    lineChart.data.datasets[0].data = amountsTransactions;
+    lineChart.data.datasets[0].borderColor = borderColorGraph;
+
+    lineChart.update();
+  }
+};
+/* Update LineChart */
+
+watch(filteredList, ()=>{
+  updateLineChart();
+});
+
 /* LifeCicle Hook: onMounted */
-onMounted(()=>{
+onMounted(() => {
   createLineChart();
+  updateLineChart();
 });
 </script>
 
@@ -60,26 +104,19 @@ onMounted(()=>{
 @tailwind utilities;
 
 @layer components {
-  .container-lineChart{
-    @apply
-    h-[30rem]
-    w-[50rem]
-    px-2;
+  .container-lineChart {
+    @apply h-[30rem] w-[50rem] px-2;
   }
 
-  .line-chart{
-    @apply
-    h-full
-    w-full
-    flex items-center justify-center;
+  .line-chart {
+    @apply h-full w-full flex items-center justify-center;
   }
 
-  .chart{
-    @apply
-    h-full
-    w-full
-    flex items-center justify-center;
+  .chart {
+    @apply h-full w-full flex items-center justify-center;
   }
 
-};
+}
+
+;
 </style>

@@ -1,12 +1,15 @@
 <script setup lang="ts">
-  
+import {storeToRefs} from 'pinia';
+import {useTransactionsStore} from '@/stores/transactions/transactionsStore';
+const transactionsSroreInstance = useTransactionsStore();
+const {calculatePercentual, percentualColor} = storeToRefs(transactionsSroreInstance);
 </script>
   
 <template>
   <div class="percentual-container">
   
-    <section class="percentual-style">
-      100
+    <section v-bind:class=" `percentual-style ${percentualColor}` ">
+      {{ calculatePercentual }}
       <span>%</span>
     </section>
 
@@ -25,7 +28,6 @@
 
   .percentual-style{
     @apply
-    text-[green]
     text-6xl
     font-semibold
     font-sans

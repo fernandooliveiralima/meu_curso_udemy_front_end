@@ -28,23 +28,27 @@ import {storeToRefs} from 'pinia';
         <span>Actions</span>
       </div>
 
-      <div class="table-content">
+      <div v-for="iterator in filteredList" class="table-content">
         <div class="description-container">
           <p class="description">
-            Salary
+            {{ iterator.transaction_name }}
           </p>
         </div>
 
-        <div class="date-container">2024-02-14</div>
+        <div class="date-container">
+          {{ iterator.transaction_date }}
+        </div>
 
         <span class="amount-style">
-          100,00
+          {{ iterator.transaction_amount }}
         </span>
 
-        <span class="category-container">General</span>
+        <span class="category-container">
+          {{ iterator.transaction_category }}
+        </span>
 
         <span class="type-style">
-          Income
+          {{ iterator.transaction_type }}
         </span>
 
         <div class="container-actions">

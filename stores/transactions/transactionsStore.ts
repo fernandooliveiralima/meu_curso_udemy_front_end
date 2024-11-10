@@ -13,11 +13,12 @@ export const useTransactionsStore = defineStore('transactionsStore', () => {
   const {tokenCookie} = storeToRefs(authStoreInstance);
 
   let filteredList = ref< Array<transactionType> >([]);
+  const dayjsInstance = computed(()=> dayjs());
 
   const formAddTransactions = reactive<transactionType>({
     id:0,
     transaction_name: '',
-    transaction_date: dayjs().format('YYYY-MM-DD'),
+    transaction_date: dayjsInstance.value.format('YYYY-MM-DD'),
     transaction_category: 'General',
     transaction_amount: undefined,
     transaction_type: 'income'
@@ -93,7 +94,7 @@ export const useTransactionsStore = defineStore('transactionsStore', () => {
 
       containerAllTransactions.value = response;
       updateFilteredList();
-      console.log('loadAllTransactions() store ->', response);
+      
     } catch (error) {
       
     }
@@ -201,7 +202,32 @@ export const useTransactionsStore = defineStore('transactionsStore', () => {
     return new Intl.NumberFormat('en-US', {style: 'currency', currency:'USD'}).format(amount);
   }
 
-  watch([containerAllTransactions, formAddTransactions.transaction_date], ()=>{
+    const percentualColor = computed(()=>{
+      let copyFilteredList = [...filteredList.value];
+      if(copyFilteredList.length === 0){return 'expense'};
+      const firstTransaction = copyFilteredList[0]
+
+      if( Number(firstTransaction.transaction_amount) > 0 ){
+        return 'income';
+      }else if(Number(firstTransaction.transaction_amount) < 0){
+        return 'expense';
+      }
+
+      return firstTransaction;
+    });
+
+    const calculatePercentual = computed(()=>{
+      if(incomes.value === 0){return 0;}
+
+      const percentual = ( Number(incomes.value) - Math.abs( Number(expenses.value) )) / Number(incomes.value) * 100;
+      return Math.max(0, Math.min(100, parseInt(`${percentual}`)))
+    });
+
+    const transactionColor = (transaction: transactionType)=>{
+      return Number(transaction.transaction_amount) > 0 ? 'income' : 'expense';
+    };
+
+  watch([containerAllTransactions, ()=> formAddTransactions.transaction_date], ()=>{
     updateFilteredList();
   });
 
@@ -212,6 +238,8 @@ export const useTransactionsStore = defineStore('transactionsStore', () => {
     totalTransactions,
     incomes,
     expenses,
+    percentualColor,
+    calculatePercentual,
 
     addTransactions,
     loadAllTransactions,
@@ -219,7 +247,8 @@ export const useTransactionsStore = defineStore('transactionsStore', () => {
     editTransaction,
     removeTransactions,
     updateFilteredList,
-    formatAmounts
+    formatAmounts,
+    transactionColor
   }
 
 });
