@@ -1,25 +1,42 @@
 <script setup lang="ts">
-import {storeToRefs} from 'pinia';
+  import { ref } from 'vue';
+  import { storeToRefs } from 'pinia';
+  import { useTransactionsStore } from '@/stores/transactions/transactionsStore';
+
   import type {transactionType} from '@/types/transactions/transactionType';
 
   import editInfoC from './editInfoC.vue';
   import removeInfoC from './removeInfoC.vue';
-  import editTransactionsFormC from './editTransactionsFormC.vue';
+  import editTransactionsFormC from './editTransactionsFormC.vue'; // Importar o novo componente
 
-  import {useTransactionsStore} from '@/stores/transactions/transactionsStore';
   const transactionStoreInstance = useTransactionsStore();
   const { filteredList } = storeToRefs(transactionStoreInstance);
 
   // Estado para controlar a exibição do modal
   const isModalOpen = ref(false);
 
+  // Função para abrir o modal de edição
+  const openEditModal = (transaction: transactionType) => {
+    transactionStoreInstance.editTransaction(transaction);
+    isModalOpen.value = true; // Abrir o modal
+  };
+
+  // Função para fechar o modal
+  const closeEditModal = () => {
+    isModalOpen.value = false;
+  };
+
   
+
+  onMounted(() => {
+    transactionStoreInstance.updateFilteredList();
+  });
 </script>
-  
+
 <template>
   <div>
-    <section class="container-list">
-      <div class="header-list">
+    <section class="mt-10 overflow-y-auto max-h-96">
+      <div class="w-[100rem] bg-slate-700 p-3 text-2xl font-semibold rounded-md flex items-center justify-between ">
         <span>Description</span>
         <span>Date</span>
         <span>Amount</span>
@@ -28,34 +45,28 @@ import {storeToRefs} from 'pinia';
         <span>Actions</span>
       </div>
 
-      <div v-for="iterator in filteredList" class="table-content">
-        <div class="description-container">
-          <p class="description">
-            {{ iterator.transaction_name }}
-          </p>
+      <div v-for="(iterator) in filteredList" :key="iterator.id" class="default-style table-content"> 
+        <div class="max-w-44 overflow-x-auto">
+          <p class="text-xl whitespace-nowrap">{{ iterator.transaction_name }}</p>
         </div>
+        
+        <div class="text-xl">{{ iterator.transaction_date }}</div class="text-xl">
 
-        <div class="date-container">
-          {{ iterator.transaction_date }}
-        </div>
-
-        <span class="amount-style">
-          {{ iterator.transaction_amount }}
+        <span :class="transactionStoreInstance.transactionColor(iterator)" id="amount-style">
+          {{ transactionStoreInstance.formatAmounts(Number(iterator.transaction_amount)) }}
         </span>
 
-        <span class="category-container">
-          {{ iterator.transaction_category }}
-        </span>
+        <span class="text-xl">{{ iterator.transaction_category }}</span>
 
-        <span class="type-style">
+        <span :class="transactionStoreInstance.transactionColor(iterator)" id="type-style">
           {{ iterator.transaction_type }}
         </span>
 
-        <div class="container-actions">
-          <span class="edit-container">
+        <div class="flex flex-col text-xl">
+          <span @click="openEditModal(iterator)" class="text-base cursor-pointer">
             <editInfoC></editInfoC>
           </span>
-          <span class="remove-container">
+          <span @click="transactionStoreInstance.removeTransactions(iterator.id)" class="text-base mt-5 cursor-pointer">
             <removeInfoC></removeInfoC>
           </span>
         </div>
@@ -63,10 +74,10 @@ import {storeToRefs} from 'pinia';
     </section>
 
     <!-- Modal de Edição -->
-    <div v-if="isModalOpen" class="modal-container">
-      <div class="modal-overlay modal-overlay-config"></div>
-      <div class="body-modal body-modal-config">
-        <editTransactionsFormC /> <!-- Componente do formulário de edição -->
+    <div v-if="isModalOpen" class="fixed inset-0 flex items-center justify-center z-50">
+      <div class="modal-overlay bg-black opacity-50 absolute inset-0"></div>
+      <div class="modal-container p-6 rounded-lg z-50">
+        <editTransactionsFormC :closeModal="closeEditModal" :showModal="isModalOpen" /> <!-- Componente do formulário de edição -->
       </div>
     </div>
   </div>
@@ -77,50 +88,12 @@ import {storeToRefs} from 'pinia';
 @tailwind components;
 @tailwind utilities;
 
-.container-list{
-  @apply
-  mt-10 overflow-y-auto max-h-96;
-}
-
-.header-list{
-  @apply
-  w-[100rem] 
-  bg-slate-700 
-  font-sans
-  p-3 
-  text-2xl font-semibold 
-  rounded-md 
-  flex items-center justify-between;
+.default-style > span {
+  @apply text-xl;
 }
 
 .table-content {
-  @apply 
-  bg-slate-600 
-  flex items-center justify-between
-  font-sans
-  rounded-md 
-  mt-20 
-  py-3 px-3;
-}
-.table-content > span {
-  @apply text-xl;
-}
-
-.description-container{
-  @apply
-  max-w-44 overflow-x-auto;
-}
-.description{
-  @apply
-  text-xl whitespace-nowrap;
-}
-
-.date-container{
-  @apply  text-xl;
-}
-
-.category-container{
-  @apply text-xl;
+  @apply bg-slate-600 flex items-center rounded-md justify-between mt-20 py-3 px-3;
 }
 
 .income {
@@ -130,46 +103,19 @@ import {storeToRefs} from 'pinia';
   @apply text-red-600;
 }
 
-.amount-style {
+#amount-style {
   @apply font-semibold;
 }
 
-.type-style {
+#type-style {
   @apply font-semibold;
-}
-
-.container-actions{
-  @apply  flex flex-col text-xl;
-}
-
-.edit-container{
-  @apply  text-base cursor-pointer;
-}
-
-.remove-container{
-  @apply  text-base mt-5 cursor-pointer;
-}
-
-.modal-container{
-  @apply  
-  fixed inset-0 
-  flex items-center justify-center 
-  z-50;
 }
 
 .modal-overlay {
   @apply fixed inset-0 bg-gray-600 opacity-75;
 }
-.modal-overlay-config{
-  @apply
-  bg-black opacity-50 absolute inset-0;
-}
 
-.body-modal {
+.modal-container {
   @apply relative p-4 w-96 rounded shadow-lg;
-}
-.body-modal-config{
-  @apply
-  p-6 rounded-lg z-50;
 }
 </style>

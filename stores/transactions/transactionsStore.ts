@@ -102,43 +102,53 @@ export const useTransactionsStore = defineStore('transactionsStore', () => {
   /* load all transactions */
   
  
-  /* Update Transactions */
-    const currentTransaction = ref<transactionType | null>(null);
-    const editTransaction = (transaction: transactionType)=>{
-      currentTransaction.value = {...transaction}
-    }
+    //Update Transactions
+    const currentTransaction = ref<transactionType | null>(null); // Para armazenar a transação sendo editada
+                  
+    const editTransaction = (transaction: transactionType) => {
+        currentTransaction.value = { ...transaction }; // Copiar a transação selecionada para edição
+    };
 
-    const updateTransactions = async ()=>{
-      const toast = useToast()
-      if(currentTransaction.value){
-
-        if( (currentTransaction.value.transaction_type==='income' && Number(currentTransaction.value.transaction_amount) <0) || 
-        (currentTransaction.value.transaction_type==='expense' && Number(currentTransaction.value.transaction_amount) >0)
-        ){
-          toast.error('The Value and Type Must be The Same')
-        }
-
-        try {
-          const response: TransactionResponse = await $fetch(`http://localhost:8000/api/transactions/${currentTransaction.value.id}`, {
-            method:'PUT',
-            body:currentTransaction.value,
-            headers:{
-              'Authorization':`Bearer ${tokenCookie.value}`,
-              'Accept':'application/json'
+    const updateTransaction = async () => {
+        if (currentTransaction.value) {
+          const toast = useToast();
+            // Validação de acordo com o tipo de transação
+            if (
+                (currentTransaction.value.transaction_type === 'income' 
+                    && Number(currentTransaction.value.transaction_amount) < 0) ||
+                    
+                (currentTransaction.value.transaction_type === 'expense' 
+                    && Number(currentTransaction.value.transaction_amount) > 0)
+            ) {
+                toast.error('The Value and Type Must Be the Same!');
+                //console.error('O valor da transação não condiz com o tipo.');
+                return; // Impede a continuação da submissão se a validação falhar
             }
-          });
 
-          const index = containerAllTransactions.value.findIndex(item => item.id === currentTransaction.value!.id);
-          if(index !== -1){
-            containerAllTransactions.value[index] = {...currentTransaction.value};
-            updateFilteredList();
-          };
-        } catch (error) {
-          console.log(error)
+            try {
+                const response: TransactionResponse = await $fetch(`http://localhost:8000/api/transactions/${currentTransaction.value.id}`, {
+                    method: 'PUT',
+                    body: currentTransaction.value,
+                    headers: {
+                        'Authorization': `Bearer ${tokenCookie.value}`,
+                        'Accept': 'application/json'
+                    }
+                });
+
+                // Atualiza a lista local após sucesso
+                const index = containerAllTransactions.value.findIndex(item => item.id === currentTransaction.value!.id);
+                if (index !== -1) {
+                    containerAllTransactions.value[index] = { ...currentTransaction.value };
+                    updateFilteredList(); // Atualizar a lista filtrada
+                    currentTransaction.value = null; // Limpar após edição
+                }
+
+                toast.info('Transaction Edited!');
+                //console.log('Transaction updated successfully:', response);
+            } catch (error) {
+                //console.error('Error updating transaction:', error);
+            }
         }
-
-      }
-
     };
   /* Update Transactions */
 
@@ -240,10 +250,11 @@ export const useTransactionsStore = defineStore('transactionsStore', () => {
     expenses,
     percentualColor,
     calculatePercentual,
+    currentTransaction,
 
     addTransactions,
     loadAllTransactions,
-    updateTransactions,
+    updateTransaction,
     editTransaction,
     removeTransactions,
     updateFilteredList,
